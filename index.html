@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Quick English Online</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #10B981;
+            --background: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text: #1F2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: #E5E7EB;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading Screen */
+        .loading {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 50px;
+        }
+
+        /* Flashcard Feature */
+        .card-box {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .card-box:active {
+            transform: scale(0.98);
+        }
+
+        .word-en {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .word-type {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #9CA3AF;
+            margin-bottom: 15px;
+        }
+
+        .word-id {
+            font-size: 1.3rem;
+            color: #374151;
+            font-weight: 500;
+            display: none;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-top: 15px;
+        }
+
+        /* Quiz Feature */
+        .quiz-section {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .quiz-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        button {
+            background-color: #F3F4F6;
+            border: 2px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        button:hover {
+            background-color: #E5E7EB;
+        }
+
+        .btn-next {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .btn-next:hover {
+            background-color: #4338CA;
+        }
+
+        .success-message {
+            text-align: center;
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⚡ Quick English Online</h1>
+        <p>Kosakata Penting Harian Langsung dari Cloud</p>
+    </header>
+
+    <!-- Progress Tracker -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loadingState" class="loading">Mengambil kosakata segar dari server...</div>
+
+    <!-- Mode Flashcard -->
+    <div id="flashcardMode" style="display: none;">
+        <div class="card-box" onclick="flipCard()">
+            <div class="word-en" id="vocabEn">-</div>
+            <div class="word-type" id="vocabType">-</div>
+            <div class="word-id" id="vocabId">-</div>
+            <div class="hint" id="cardHint">Ketuk untuk melihat arti</div>
+        </div>
+        <button class="btn-next" onclick="nextWord()">Lanjut Kata Berikutnya →</button>
+    </div>
+
+    <!-- Mode Kuis Kilat -->
+    <div id="quizMode" class="quiz-section">
+        <div class="quiz-title" id="quizQuestion">Memuat kuis...</div>
+        <div class="btn-grid" id="quizOptions"></div>
+    </div>
+
+    <!-- Selamat Selesai -->
+    <div id="successMode" class="success-message">
+        <h2>🎉 Sesi Selesai!</h2>
+        <p>Hebat! Kamu baru saja menguasai kosakata penting hari ini secara kilat.</p>
+        <button class="btn-next" onclick="fetchOnlineVocab()">Ambil Kata Baru Lagi 🔄</button>
+    </div>
+</div>
+
+<script>
+    // URL API database online (Menggunakan repository publik berisi kosakata esensial sehari-hari)
+    const API_URL = "https://raw.githubusercontent.com/atilsamancioglu/K21-JSONDataSet/master/vocabulary.json";
+
+    let globalDataset = [];
+    let sessionDataset = []; // Mengambil 5 kata acak untuk sesi ini
+    let currentIndex = 0;
+    let isFlipped = false;
+    let isQuizPhase = false;
+
+    // 1. Fungsi Mengambil Data dari Internet (Online)
+    async function fetchOnlineVocab() {
+        showLoading(true);
+        try {
+            // Jika belum punya master datanya, ambil dari internet
+            if (globalDataset.length === 0) {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                // Filter data untuk memastikan struktur yang bersih
+                globalDataset = data.scenarios || data; 
+            }
+            
+            // Acak dan ambil 5 kata penting untuk sesi belajar saat ini
+            generateSessionWords();
+            
+            showLoading(false);
+            startSession();
+        } catch (error) {
+            alert("Gagal memuat kata online. Menggunakan data cadangan offline.");
+            useFallbackData();
+        }
+    }
+
+    function generateSessionWords() {
+        // Mengacak data global
+        const shuffled = [...globalDataset].sort(() => 0.5 - Math.random());
+        
+        // Ambil 5 kata acak dan buat pilihan jawaban kuis secara dinamis
+        sessionDataset = shuffled.slice(0, 5).map(item => {
+            const wrongOptions = shuffled
+                .filter(x => x.turkish !== item.turkish) // Memakai dataset multisubjek sebagai basis arti
+                .slice(0, 3)
+                .map(x => translateToId(x.turkish));
+
+            // Catatan: Karena API publik gratis mayoritas EN-TR, di bawah ini kita lokalisasikan otomatis 
+            // menggunakan kamus mapping internal / translasi instan untuk kata sehari-hari yang populer.
+            const artiIndonesia = translateToId(item.turkish) || item.meaning || "Arti";
+
+            return {
+                en: item.word,
+                type: item.type || "verb/noun",
+                id: artiIndonesia,
+                options: shuffleArray([artiIndonesia, ...wrongOptions])
+            };
+        });
+    }
+
+    // Kamus lokal pembantu untuk menyelaraskan database online agar ramah bahasa Indonesia sehari-hari
+    function translateToId(word) {
+        const dictionary = {
+            "Geliştirmek": "Mengembangkan", "Katkıda bulunmak": "Berkontribusi", "Erişmek": "Mengakses",
+            "Başarmak": "Mencapai / Sukses", "Gözlemlemek": "Mengamati", "Sürdürmek": "Mempertahankan",
+            "Etkilemek": "Mempengaruhi", "Fark etmek": "Menyadari", "Kaçınmak": "Menghindari",
+            "Kabul etmek": "Menerima", "Reddetmek": "Menolak", "Açıklamak": "Menjelaskan",
+            "Maliyet": "Biaya", "Fayda": "Manfaat", "Yetenek": "Kemampuan", "Deneyim": "Pengalaman",
+            "Fırsat": "Kesempatan", "Amaç": "Tujuan", "Çözüm": "Solusi", "Sonuç": "Hasil"
+        };
+        return dictionary[word] || word;
+    }
+
+    function useFallbackData() {
+        // Data cadangan penting sehari-hari jika internet mati
+        globalDataset = [
+            { word: "Accomplish", type: "verb", turkish: "Başarmak" },
+            { word: "Avoid", type: "verb", turkish: "Kaçınmak" },
+            { word: "Opportunity", type: "noun", turkish: "Fırsat" },
+            { word: "Maintain", type: "verb", turkish: "Sürdürmek" },
+            { word: "Benefit", type: "noun", turkish: "Fayda" }
+        ];
+        generateSessionWords();
+        showLoading(false);
+        startSession();
+    }
+
+    // 2. Logika Alur Aplikasi
+    function startSession() {
+        currentIndex = 0;
+        isFlipped = false;
+        isQuizPhase = false;
+        
+        document.getElementById("successMode").style.display = "none";
+        document.getElementById("quizMode").style.display = "none";
+        document.getElementById("flashcardMode").style.display = "block";
+        
+        showWord();
+        updateProgress();
+    }
+
+    function showWord() {
+        const currentData = sessionDataset[currentIndex];
+        document.getElementById("vocabEn").innerText = currentData.en;
+        document.getElementById("vocabType").innerText = `(${currentData.type})`;
+        document.getElementById("vocabId").innerText = currentData.id;
+        
+        // Reset status kartu
+        document.getElementById("vocabId").style.display = "none";
+        document.getElementById("cardHint").innerText = "Ketuk untuk melihat arti";
+        isFlipped = false;
+    }
+
+    function flipCard() {
+        const idText = document.getElementById("vocabId");
+        const hint = document.getElementById("cardHint");
+        
+        if (!isFlipped) {
+            idText.style.display = "block";
+            hint.innerText = "Ketuk lagi untuk menyembunyikan";
+            isFlipped = true;
+        } else {
+            idText.style.display = "none";
+            hint.innerText = "Ketuk untuk melihat arti";
+            isFlipped = false;
+        }
+    }
+
+    function nextWord() {
+        if (currentIndex < sessionDataset.length - 1) {
+            currentIndex++;
+            showWord();
+            updateProgress();
+        } else {
+            // Berpindah ke fase kuis interaktif
+            isQuizPhase = true;
+            currentIndex = 0;
+            document.getElementById("flashcardMode").style.display = "none";
+            document.getElementById("quizMode").style.display = "block";
+            loadQuiz();
+        }
+    }
+
+    function loadQuiz() {
+        updateProgress();
+        const currentData = sessionDataset[currentIndex];
+        document.getElementById("quizQuestion").innerText = `Apa arti dari kata harian "${currentData.en}"?`;
+        
+        const optionsContainer = document.getElementById("quizOptions");
+        optionsContainer.innerHTML = ""; 
+
+        currentData.options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.innerText = option;
+            btn.onclick = () => checkAnswer(option, currentData.id, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, correct, button) {
+        if (selected === correct) {
+            button.style.backgroundColor = "#10B981";
+            button.style.color = "white";
+            button.style.borderColor = "#10B981";
+            
+            setTimeout(() => {
+                if (currentIndex < sessionDataset.length - 1) {
+                    currentIndex++;
+                    loadQuiz();
+                } else {
+                    // Sesi selesai sempurna
+                    document.getElementById("quizMode").style.display = "none";
+                    document.getElementById("successMode").style.display = "block";
+                    document.getElementById("progressBar").style.width = "100%";
+                }
+            }, 800);
+        } else {
+            button.style.backgroundColor = "#EF4444";
+            button.style.color = "white";
+            button.style.borderColor = "#EF4444";
+        }
+    }
+
+    // 3. Fungsi Pembantu (Helpers)
+    function updateProgress() {
+        if (sessionDataset.length === 0) return;
+        const totalSteps = sessionDataset.length * 2;
+        let currentStep = currentIndex;
+        if (isQuizPhase) {
+            currentStep = sessionDataset.length + currentIndex;
+        }
+        const percentage = (currentStep / totalSteps) * 100;
+        document.getElementById("progressBar").style.width = percentage + "%";
+    }
+
+    function showLoading(isLoading) {
+        document.getElementById("loadingState").style.display = isLoading ? "block" : "none";
+        if (isLoading) {
+            document.getElementById("flashcardMode").style.display = "none";
+            document.getElementById("quizMode").style.display = "none";
+            document.getElementById("successMode").style.display = "none";
+        }
+    }
+
+    function shuffleArray(array) {
+        return array.sort(() => 0.5 - Math.random());
+    }
+
+    // Jalankan otomatis saat web dibuka
+    fetchOnlineVocab();
+</script>
+
+</body>
+</html>
