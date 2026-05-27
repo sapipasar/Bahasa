@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="theme-color" content="#4F46E5">
+    <title>⚡ Quick English Pro - 12 Level Percakapan Sehari-hari (SMA/Umum)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --background: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --border: #E5E7EB;
+            --gold: #FBBF24;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .level-box {
+            background: linear-gradient(135deg, var(--primary), #8B5CF6);
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .xp-box, .streak-box {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #F3F4F6;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+
+        .daily-goal {
+            background: var(--gold);
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            color: #92400E;
+        }
+
+        .next-level {
+            background: #E0E7FF;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .progress-container {
+            background-color: var(--border);
+            border-radius: 20px;
+            height: 8px;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--secondary), #34D399);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .theme-badge {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .theme-tag {
+            display: inline-block;
+            background: #E0E7FF;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .card-box {
+            background: var(--card-bg);
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+            padding: 30px 20px;
+            text-align: center;
+            min-height: 280px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: transform 0.1s;
+        }
+
+        .card-box:active {
+            transform: scale(0.98);
+        }
+
+        .word-en {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            word-break: break-word;
+        }
+
+        .word-type {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin: 8px 0;
+        }
+
+        .word-id {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 15px;
+            display: none;
+            background: #F3F4F6;
+            padding: 10px;
+            border-radius: 40px;
+        }
+
+        .example-sentence {
+            font-size: 0.8rem;
+            color: #4B5563;
+            margin-top: 12px;
+            font-style: italic;
+            background: #F9FAFB;
+            padding: 8px;
+            border-radius: 16px;
+        }
+
+        .voice-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 60px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 0.85rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .btn-prev {
+            background: #9CA3AF;
+            color: white;
+            flex: 1;
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+            flex: 2;
+            border: none;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .quiz-section {
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            display: none;
+        }
+
+        .quiz-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            background: #F9FAFB;
+            border: 2px solid var(--border);
+            border-radius: 60px;
+            padding: 12px 18px;
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .success-message {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 32px;
+            display: none;
+        }
+
+        .reset-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--text-light);
+            margin-top: 20px;
+        }
+
+        .voice-feedback {
+            margin-top: 12px;
+            padding: 8px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            text-align: center;
+            background: #F3F4F6;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="stats-bar">
+        <div class="level-box" id="levelDisplay">📖 Level 1/12</div>
+        <div class="xp-box">⭐ <span id="xpCount">0</span> XP</div>
+        <div class="streak-box">🔥 <span id="streakCount">0</span> hari</div>
+        <div class="daily-goal" id="dailyGoalDisplay">📅 0/5</div>
+        <div class="next-level" id="nextLevelInfo">➡️ 100 XP ke Lv2</div>
+    </div>
+
+    <h1>⚡ Quick English Pro</h1>
+    <div class="subtitle">🎯 12 Level • Percakapan Sehari-hari • SMA & Umum</div>
+
+    <div class="theme-badge" id="themeBadge">
+        <span class="theme-tag" id="currentTheme">💬 Daily Conversations</span>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div id="flashcardMode">
+        <div class="card-box" onclick="flipCard()">
+            <div class="word-en" id="vocabEn">-</div>
+            <div class="word-type" id="vocabType">-</div>
+            <div class="word-id" id="vocabId">-</div>
+            <div class="example-sentence" id="exampleSentence">-</div>
+            <div class="hint" style="font-size:0.7rem; margin-top:12px; color:#9CA3AF;">👆 Ketuk untuk arti</div>
+        </div>
+        <div style="text-align:center;">
+            <button class="voice-btn" id="speakBtn">🔊 Dengarkan</button>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-prev" onclick="prevWord()">◀ Kembali</button>
+            <button class="btn-next" onclick="nextWord()">Lanjut ▶</button>
+        </div>
+    </div>
+
+    <div id="quizMode" class="quiz-section">
+        <div class="quiz-title" id="quizQuestion">Memuat kuis...</div>
+        <div id="quizOptions"></div>
+        <div style="text-align:center; margin-top:15px;">
+            <button class="voice-btn" id="speakQuizBtn">🔊 Dengarkan Soal</button>
+            <button class="voice-btn" id="voiceAnswerBtn">🎤 Jawab Suara</button>
+        </div>
+        <div id="voiceFeedback" class="voice-feedback"></div>
+        <div class="nav-buttons" style="margin-top:15px;">
+            <button class="btn-prev" onclick="prevQuiz()">◀ Sebelumnya</button>
+            <button class="btn-next" onclick="nextQuiz()">Selanjutnya ▶</button>
+        </div>
+    </div>
+
+    <div id="successMode" class="success-message">
+        <h2>🎉 +25 XP!</h2>
+        <p id="successMessage">Hebat! 5 ekspresi baru hari ini.</p>
+        <button class="reset-btn" onclick="claimDailyReward()">✨ Lanjut Sesi Baru</button>
+    </div>
+    <footer>⭐ Setiap 5 kata = +25 XP • Naik level tiap 100 XP • Fokus percakapan real-life</footer>
+</div>
+
+<script>
+    // ======================= 12 LEVEL KOSAKATA PERCAKAPAN SEHARI-HARI (SMA/UMUM) =======================
+    // Fokus pada frasa, ekspresi natural, kata kerja penting, dan adjective yang sering dipakai
+    
+    const VOCAB_BY_LEVEL = {
+        1: { name: "💬 Essential Greetings & Responses", words: [
+            { en: "What's up?", type: "phrase", id: "Ada apa?", example: "Hey, what's up? - Not much, just chilling." },
+            { en: "How's it going?", type: "phrase", id: "Bagaimana kabarmu?", example: "How's it going? - Pretty good, thanks!" },
+            { en: "Long time no see", type: "phrase", id: "Lama tidak bertemu", example: "Hey! Long time no see! Where have you been?" },
+            { en: "I'm good", type: "phrase", id: "Saya baik-baik saja", example: "How are you? - I'm good, you?" },
+            { en: "Not bad", type: "phrase", id: "Lumayan", example: "How was the test? - Not bad, I think." },
+            { en: "Take care", type: "phrase", id: "Jaga diri", example: "See you later, take care!" },
+            { en: "See you later", type: "phrase", id: "Sampai jumpa nanti", example: "I gotta go, see you later!" },
+            { en: "Same here", type: "phrase", id: "Sama-sama / Saya juga", example: "I'm tired. - Same here!" }
+        ]},
+        2: { name: "🗣️ Giving Opinions (Ringan)", words: [
+            { en: "I think", type: "phrase", id: "Saya pikir", example: "I think we should go now." },
+            { en: "In my opinion", type: "phrase", id: "Menurut pendapat saya", example: "In my opinion, this movie is great." },
+            { en: "I feel like", type: "phrase", id: "Saya merasa / Saya ingin", example: "I feel like eating pizza." },
+            { en: "To be honest", type: "phrase", id: "Sejujurnya", example: "To be honest, I don't like it." },
+            { en: "I guess", type: "phrase", id: "Saya kira", example: "I guess you're right." },
+            { en: "Maybe", type: "adverb", id: "Mungkin", example: "Maybe we can meet tomorrow." },
+            { en: "Probably", type: "adverb", id: "Kemungkinan besar", example: "She's probably at home." },
+            { en: "Definitely", type: "adverb", id: "Pasti", example: "I'll definitely come to your party." }
+        ]},
+        3: { name: "💪 Daily Actions & Routines", words: [
+            { en: "Get up", type: "phrasal verb", id: "Bangun tidur", example: "I get up at 6 AM every day." },
+            { en: "Hang out", type: "phrasal verb", id: "Nongkrong / berkumpul", example: "Let's hang out this weekend." },
+            { en: "Work out", type: "phrasal verb", id: "Olahraga", example: "I work out three times a week." },
+            { en: "Chill out", type: "phrasal verb", id: "Santai", example: "Just chill out, no need to rush." },
+            { en: "Figure out", type: "phrasal verb", id: "Mencari tahu / memecahkan", example: "I need to figure out this problem." },
+            { en: "Deal with", type: "phrasal verb", id: "Menghadapi", example: "I don't know how to deal with this stress." },
+            { en: "Run out of", type: "phrasal verb", id: "Habis", example: "We ran out of milk." }
+        ]},
+        4: { name: "😎 Expressing Feelings (Natural)", words: [
+            { en: "Annoyed", type: "adjective", id: "Terganggu / kesal", example: "I'm annoyed by the loud music." },
+            { en: "Overwhelmed", type: "adjective", id: "Kewalahan", example: "I'm overwhelmed with homework." },
+            { en: "Excited about", type: "phrase", id: "Bersemangat tentang", example: "I'm excited about the concert!" },
+            { en: "Looking forward to", type: "phrase", id: "Tidak sabar menunggu", example: "I'm looking forward to seeing you." },
+            { en: "I can't stand", type: "phrase", id: "Saya tidak tahan", example: "I can't stand waiting in long lines." },
+            { en: "So done with", type: "phrase", id: "Sudah cukup / muak", example: "I'm so done with this drama." },
+            { en: "It's not a big deal", type: "phrase", id: "Itu bukan masalah besar", example: "Don't worry, it's not a big deal." }
+        ]},
+        5: { name: "📱 Social Media & Texting", words: [
+            { en: "DM me", type: "phrase", id: "Kirim pesan pribadi", example: "DM me on Instagram for details." },
+            { en: "Hit me up", type: "slang", id: "Hubungi saya", example: "Hit me up when you're free!" },
+            { en: "No cap", type: "slang", id: "Serius / tanpa bohong", example: "No cap, that was the best concert ever." },
+            { en: "Based", type: "slang", id: "Setuju / keren", example: "Your opinion is based." },
+            { en: "Mood", type: "slang", id: "Sama banget / menggambarkan suasana", example: "Sleeping all day? Mood." },
+            { en: "Go viral", type: "phrase", id: "Menjadi viral", example: "Her TikTok went viral overnight." },
+            { en: "Scrolling", type: "verb", id: "Menggulir layar", example: "I've been scrolling for hours." }
+        ]},
+        6: { name: "🍽️ Ordering & Eating Out", words: [
+            { en: "What do you recommend?", type: "phrase", id: "Apa yang Anda rekomendasikan?", example: "First time here, what do you recommend?" },
+            { en: "I'd like to order", type: "phrase", id: "Saya ingin memesan", example: "I'd like to order a pizza." },
+            { en: "Check, please", type: "phrase", id: "Minta bon / bill", example: "Can I get the check, please?" },
+            { en: "To-go", type: "phrase", id: "Bungkus / dibawa pulang", example: "I'll take the rest to-go." },
+            { en: "It's on me", type: "phrase", id: "Saya yang traktir", example: "Don't worry about the bill, it's on me." },
+            { en: "Craving", type: "noun/verb", id: "Keinginan kuat makan", example: "I'm craving something sweet." }
+        ]},
+        7: { name: "🏡 Making Plans & Invitations", words: [
+            { en: "Are you free?", type: "phrase", id: "Apakah kamu senggang?", example: "Are you free this Saturday?" },
+            { en: "Let's catch up", type: "phrase", id: "Mari bertemu & ngobrol", example: "It's been a while, let's catch up." },
+            { en: "I'm down", type: "slang", id: "Saya mau / setuju", example: "Wanna go to the mall? - I'm down!" },
+            { en: "Rain check", type: "phrase", id: "Tunda dulu", example: "Can't today, rain check?" },
+            { en: "It's a plan", type: "phrase", id: "Jadi begitu rencananya", example: "Meet at 7? It's a plan!" },
+            { en: "Count me in", type: "phrase", id: "Saya ikut", example: "You're going to the beach? Count me in!" }
+        ]},
+        8: { name: "🎓 School & Work Talk", words: [
+            { en: "Deadline", type: "noun", id: "Batas waktu", example: "The deadline is tomorrow, hurry up!" },
+            { en: "Pull an all-nighter", type: "phrase", id: "Begadang semalaman", example: "I had to pull an all-nighter to study." },
+            { en: "Group project", type: "noun", id: "Proyek kelompok", example: "Group projects can be stressful." },
+            { en: "My bad", type: "slang", id: "Maaf saya salah", example: "I forgot to bring the notes, my bad." },
+            { en: "Get fired", type: "phrase", id: "Dipecat", example: "He got fired for being late too often." },
+            { en: "Quit my job", type: "phrase", id: "Mengundurkan diri", example: "I'm thinking about quitting my job." }
+        ]},
+        9: { name: "🎬 Entertainment & Pop Culture", words: [
+            { en: "Spoiler alert", type: "phrase", id: "Peringatan spoiler", example: "Spoiler alert: The ending is shocking!" },
+            { en: "Underrated", type: "adjective", id: "Kurang dihargai", example: "This indie movie is so underrated." },
+            { en: "Overrated", type: "adjective", id: "Terlalu dipuji", example: "That restaurant is overrated." },
+            { en: "Binge-watch", type: "verb", id: "Menonton maraton", example: "I binge-watched the whole season in one day." },
+            { en: "Plot twist", type: "noun", id: "Kejutan cerita", example: "The plot twist at the end was insane!" },
+            { en: "Relatable", type: "adjective", id: "Bisa relate / terasa dekat", example: "That meme is so relatable." }
+        ]},
+        10: { name: "🤝 Disagreeing & Debating (Ringan)", words: [
+            { en: "I see your point, but...", type: "phrase", id: "Saya mengerti maksudmu, tapi...", example: "I see your point, but I still disagree." },
+            { en: "Not necessarily", type: "phrase", id: "Belum tentu", example: "That's not necessarily true." },
+            { en: "I beg to differ", type: "phrase", id: "Saya berbeda pendapat", example: "You think it's easy? I beg to differ." },
+            { en: "Fair enough", type: "phrase", id: "Baiklah / masuk akal", example: "You don't want to go? Fair enough." },
+            { en: "No way!", type: "exclamation", id: "Masa sih?", example: "He won the lottery? No way!" },
+            { en: "You've got a point", type: "phrase", id: "Pendapatmu masuk akal", example: "Actually, you've got a point there." }
+        ]},
+        11: { name: "💡 Giving Advice & Suggestions", words: [
+            { en: "You should...", type: "phrase", id: "Sebaiknya kamu...", example: "You should get more sleep." },
+            { en: "Why don't you...", type: "phrase", id: "Kenapa tidak...", example: "Why don't you just apologize?" },
+            { en: "Have you tried...?", type: "phrase", id: "Sudah coba...?", example: "Have you tried restarting your phone?" },
+            { en: "It might be a good idea to...", type: "phrase", id: "Mungkin ide bagus untuk...", example: "It might be a good idea to save money." },
+            { en: "If I were you...", type: "phrase", id: "Jika jadi kamu...", example: "If I were you, I'd tell the truth." }
+        ]},
+        12: { name: "🌟 Fluent Connectors & Fillers", words: [
+            { en: "Actually", type: "adverb", id: "Sebenarnya", example: "Actually, I changed my mind." },
+            { en: "Basically", type: "adverb", id: "Pada dasarnya", example: "Basically, we just need to wait." },
+            { en: "Honestly", type: "adverb", id: "Jujur", example: "Honestly, I don't care anymore." },
+            { en: "To be fair", type: "phrase", id: "Secara adil / jujur", example: "To be fair, he did help us before." },
+            { en: "At the end of the day", type: "phrase", id: "Pada akhirnya", example: "At the end of the day, family is everything." },
+            { en: "Long story short", type: "phrase", id: "Singkat cerita", example: "Long story short, we missed the flight." },
+            { en: "I mean", type: "phrase", id: "Maksud saya", example: "I mean, it's not that hard." }
+        ]}
+    };
+
+    // Gabungkan semua
+    let MASTER_VOCAB = [];
+    for (let lvl = 1; lvl <= 12; lvl++) {
+        if (VOCAB_BY_LEVEL[lvl]) MASTER_VOCAB.push(...VOCAB_BY_LEVEL[lvl].words);
+    }
+
+    // ======================= SISTEM USER PROGRESS =======================
+    let userData = {
+        level: 1,
+        xp: 0,
+        streak: 0,
+        lastActive: new Date().toDateString(),
+        dailyWordsDone: 0,
+        totalWordsLearned: 0
+    };
+
+    function loadUserData() {
+        const saved = localStorage.getItem("quick_english_pro_12");
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                userData = parsed;
+                const today = new Date().toDateString();
+                if (userData.lastActive !== today) {
+                    userData.dailyWordsDone = 0;
+                    userData.lastActive = today;
+                    saveUserData();
+                }
+            } catch(e) {}
+        }
+        updateUI();
+    }
+
+    function saveUserData() {
+        localStorage.setItem("quick_english_pro_12", JSON.stringify(userData));
+    }
+
+    function updateUI() {
+        document.getElementById("levelDisplay").innerHTML = `📖 Level ${userData.level}/12`;
+        document.getElementById("xpCount").innerText = userData.xp;
+        document.getElementById("streakCount").innerText = userData.streak;
+        document.getElementById("dailyGoalDisplay").innerHTML = `📅 ${userData.dailyWordsDone}/5`;
+        
+        const xpToNext = 100 - (userData.xp % 100);
+        const nextLv = userData.level + 1;
+        if (userData.level < 12) {
+            document.getElementById("nextLevelInfo").innerHTML = `➡️ ${xpToNext} XP ke Lv${nextLv}`;
+        } else {
+            document.getElementById("nextLevelInfo").innerHTML = `🏆 MASTER!`;
+        }
+        
+        const levelData = VOCAB_BY_LEVEL[userData.level];
+        if (levelData) {
+            document.getElementById("currentTheme").innerHTML = levelData.name;
+        }
+    }
+
+    function addXP(amount) {
+        userData.xp += amount;
+        let newLevel = Math.min(Math.floor(userData.xp / 100) + 1, 12);
+        if (newLevel > userData.level && newLevel <= 12) {
+            userData.level = newLevel;
+            alert(`🎉 LEVEL UP! ${userData.level}/12 🎉\nTema baru: ${VOCAB_BY_LEVEL[userData.level]?.name || "Fluent Conversations"}`);
+        }
+        saveUserData();
+        updateUI();
+    }
+
+    function completeDailySet() {
+        userData.dailyWordsDone += 5;
+        userData.totalWordsLearned += 5;
+        addXP(25);
+        
+        const today = new Date().toDateString();
+        if (userData.lastActive !== today && userData.dailyWordsDone >= 5) {
+            userData.streak++;
+            userData.lastActive = today;
+        }
+        saveUserData();
+        updateUI();
+        document.getElementById("successMessage").innerHTML = `🎉 +25 XP! Total ${userData.totalWordsLearned} frasa dikuasai. Level ${userData.level}/12`;
+    }
+
+    function claimDailyReward() {
+        startNewSession();
+    }
+
+    // ======================= GET VOCAB BY LEVEL =======================
+    function getVocabForCurrentLevel() {
+        let maxLevel = Math.min(userData.level, 12);
+        let pool = [];
+        for (let i = 1; i <= maxLevel; i++) {
+            if (VOCAB_BY_LEVEL[i]) {
+                pool.push(...VOCAB_BY_LEVEL[i].words);
+            }
+        }
+        if (pool.length < 20) pool = MASTER_VOCAB;
+        return pool;
+    }
+
+    let sessionDataset = [];
+    let currentIndex = 0;
+    let isQuizPhase = false;
+    let isFlipped = false;
+
+    function startNewSession() {
+        const vocabPool = getVocabForCurrentLevel();
+        const shuffled = [...vocabPool].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 5);
+        
+        sessionDataset = selected.map(item => {
+            let wrongPool = vocabPool.filter(w => w.id !== item.id).map(w => w.id);
+            wrongPool = [...new Set(wrongPool)].sort(() => 0.5 - Math.random()).slice(0, 3);
+            while(wrongPool.length < 3) wrongPool.push("???");
+            return {
+                en: item.en,
+                type: item.type,
+                id: item.id,
+                example: item.example,
+                options: [item.id, ...wrongPool].sort(() => 0.5 - Math.random())
+            };
+        });
+        
+        currentIndex = 0;
+        isQuizPhase = false;
+        document.getElementById("flashcardMode").style.display = "block";
+        document.getElementById("quizMode").style.display = "none";
+        document.getElementById("successMode").style.display = "none";
+        showWord();
+        updateProgress();
+        updateUI();
+    }
+
+    function showWord() {
+        const data = sessionDataset[currentIndex];
+        document.getElementById("vocabEn").innerText = data.en;
+        document.getElementById("vocabType").innerText = `(${data.type})`;
+        document.getElementById("vocabId").innerText = data.id;
+        document.getElementById("exampleSentence").innerHTML = `💬 ${data.example}`;
+        document.getElementById("vocabId").style.display = "none";
+        isFlipped = false;
+    }
+
+    function flipCard() {
+        const idElem = document.getElementById("vocabId");
+        if (!isFlipped) {
+            idElem.style.display = "block";
+            isFlipped = true;
+        } else {
+            idElem.style.display = "none";
+            isFlipped = false;
+        }
+    }
+
+    function nextWord() {
+        if (currentIndex < sessionDataset.length - 1) {
+            currentIndex++;
+            showWord();
+        } else {
+            isQuizPhase = true;
+            currentIndex = 0;
+            document.getElementById("flashcardMode").style.display = "none";
+            document.getElementById("quizMode").style.display = "block";
+            loadQuiz();
+        }
+        updateProgress();
+    }
+
+    function prevWord() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            showWord();
+            updateProgress();
+        }
+    }
+
+    function loadQuiz() {
+        const data = sessionDataset[currentIndex];
+        document.getElementById("quizQuestion").innerHTML = `❓ Apa arti dari <strong>"${data.en}"</strong>?`;
+        const container = document.getElementById("quizOptions");
+        container.innerHTML = "";
+        data.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.innerText = opt;
+            btn.className = "quiz-option";
+            btn.onclick = () => checkAnswer(opt, data.id, btn);
+            container.appendChild(btn);
+        });
+        updateProgress();
+    }
+
+    function checkAnswer(selected, correct, btn) {
+        if (selected === correct) {
+            btn.style.backgroundColor = "#10B981";
+            setTimeout(() => {
+                if (currentIndex < sessionDataset.length - 1) {
+                    currentIndex++;
+                    loadQuiz();
+                } else {
+                    document.getElementById("quizMode").style.display = "none";
+                    document.getElementById("successMode").style.display = "block";
+                    completeDailySet();
+                    document.getElementById("progressBar").style.width = "100%";
+                }
+            }, 600);
+        } else {
+            btn.style.backgroundColor = "#EF4444";
+            setTimeout(() => {
+                btn.style.backgroundColor = "";
+            }, 500);
+        }
+    }
+
+    function nextQuiz() {
+        if (currentIndex < sessionDataset.length - 1) {
+            currentIndex++;
+            loadQuiz();
+        }
+    }
+
+    function prevQuiz() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            loadQuiz();
+        }
+    }
+
+    function updateProgress() {
+        if (!sessionDataset.length) return;
+        const total = sessionDataset.length * 2;
+        let step = isQuizPhase ? sessionDataset.length + currentIndex : currentIndex;
+        let percent = (step / total) * 100;
+        document.getElementById("progressBar").style.width = percent + "%";
+    }
+
+    // ======================= FITUR SUARA =======================
+    function speak(text, lang = 'en-US') {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    document.getElementById("speakBtn")?.addEventListener("click", () => {
+        if (sessionDataset[currentIndex]) speak(sessionDataset[currentIndex].en, 'en-US');
+    });
+    
+    document.getElementById("speakQuizBtn")?.addEventListener("click", () => {
+        if (sessionDataset[currentIndex]) speak(`What is the meaning of ${sessionDataset[currentIndex].en}?`, 'en-US');
+    });
+
+    let recognition = null;
+    function initSpeech() {
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.onresult = (e) => {
+                let transcript = e.results[0][0].transcript.toLowerCase();
+                let feedback = document.getElementById("voiceFeedback");
+                feedback.style.display = "block";
+                let currentData = sessionDataset[currentIndex];
+                if (transcript.includes(currentData.id.toLowerCase()) || currentData.id.toLowerCase().includes(transcript)) {
+                    feedback.innerHTML = "✅ Benar! ✅";
+                    feedback.style.background = "#D1FAE5";
+                    setTimeout(() => {
+                        if (currentIndex < sessionDataset.length - 1) {
+                            currentIndex++;
+                            loadQuiz();
+                        } else {
+                            document.getElementById("quizMode").style.display = "none";
+                            document.getElementById("successMode").style.display = "block";
+                            completeDailySet();
+                        }
+                        feedback.style.display = "none";
+                    }, 1000);
+                } else {
+                    feedback.innerHTML = `❌ Salah. Arti: ${currentData.id}`;
+                    feedback.style.background = "#FEE2E2";
+                    setTimeout(() => feedback.style.display = "none", 1500);
+                }
+            };
+        } else {
+            alert("Gunakan Chrome untuk fitur suara");
+        }
+    }
+
+    document.getElementById("voiceAnswerBtn")?.addEventListener("click", () => {
+        if (!recognition) initSpeech();
+        if (recognition) {
+            recognition.start();
+            const feedback = document.getElementById("voiceFeedback");
+            feedback.style.display = "block";
+            feedback.innerHTML = "🎤 Dengarkan... sebutkan jawaban Anda";
+            feedback.style.background = "#E0E7FF";
+        }
+    });
+
+    loadUserData();
+    startNewSession();
+</script>
+</body>
+</html>
